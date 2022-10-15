@@ -1,1 +1,5 @@
 .idea
+/venv
+/accounts/migrations/
+/aboutus/migrations/
+/home/migrations/
