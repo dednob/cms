@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'home',
     'accounts',
     'aboutus',
-    'permission'
+    'permission',
+    'areaofwork',
+    'projects',
 ]
 
 MIDDLEWARE = [

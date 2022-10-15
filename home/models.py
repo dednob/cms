@@ -4,7 +4,7 @@ import uuid
 
 def generate_filename(instance, filename):
     extension = filename.split('.')[-1]
-    new_filename = "cmshome_%s.%s" % (uuid.uuid4(), extension)
+    new_filename = "cms-home_%s.%s" % (uuid.uuid4(), extension)
     return new_filename
 
 

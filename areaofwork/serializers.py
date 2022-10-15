@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import Aboutus
+from .models import Areaofwork
 
 
-class AboutusSerializer(serializers.ModelSerializer):
+class AreaofworkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Aboutus
+        model = Areaofwork
         fields = ['id', 'title', 'details', 'slug', 'image']
