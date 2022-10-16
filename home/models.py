@@ -9,7 +9,7 @@ def generate_filename(instance, filename):
 
 
 class Home(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=10000)
     details = models.TextField(null=True)
     slug = models.SlugField(max_length=255, null=True, unique=True)
     image = models.ImageField(upload_to=generate_filename, null=True)

@@ -63,16 +63,16 @@ def update_home(request, pk):
     return Response(serializer.errors)
 
 
-@api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def partial_update_home(request, pk=None):
-    id = pk
-    home = Home.objects.get(pk=id)
-    serializer = HomeSerializer(home, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'msg': 'Partial Data Updated'})
-    return Response(serializer.errors)
+# @api_view(['PATCH'])
+# @permission_classes([IsAuthenticated])
+# def partial_update_home(request, pk=None):
+#     id = pk
+#     home = Home.objects.get(pk=id)
+#     serializer = HomeSerializer(home, data=request.data, partial=True)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response({'msg': 'Partial Data Updated'})
+#     return Response(serializer.errors)
 
 
 @api_view(['DELETE'])

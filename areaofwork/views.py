@@ -13,14 +13,22 @@ from django.core.files.base import ContentFile
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def list(request):
+def aow_list(request):
     areaofwork = Areaofwork.objects.all()
     serializer = AreaofworkSerializer(areaofwork, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def aow_detail(request, pk):
+    id = pk
+    if id is not None:
+        aow = Areaofwork.objects.get(id=id)
+        serializer = AreaofworkSerializer(aow)
+        return Response(serializer.data)
+
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create(request):
     data = request.data
     if 'image' in data:
@@ -31,7 +39,9 @@ def create(request):
 
     slug = slugify(data['title'])
     suffix = 1
+    
     if Areaofwork.objects.filter(title__exact=slug).exists():
+        print("yes")
         count = Areaofwork.objects.filter(title__exact=slug).count()
         print(count)
         suffix += count
@@ -46,10 +56,11 @@ def create(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
+    return Response(serializer.errors)
 
 
 @api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update(request, pk):
     data = request.data
     if 'image' in data:
@@ -57,6 +68,22 @@ def update(request, pk):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         data['image'] = img_file
+    
+    slug = slugify(data['title'])
+    suffix = 1
+    
+    if Areaofwork.objects.filter(title__exact=slug).exists():
+        print("yes")
+        count = Areaofwork.objects.filter(title__exact=slug).count()
+        print(count)
+        suffix += count
+        print("yes")
+        slug = "%s-%s" % (slugify(data['title']), suffix)
+
+    else:
+        slug = "%s-%s" % (slugify(data['title']), suffix)
+
+    data['slug'] = slug
 
     areaofwork = Areaofwork.objects.get(id=pk)
     serializer = AreaofworkSerializer(areaofwork, data=data, partial=True)
@@ -66,20 +93,10 @@ def update(request, pk):
     return Response(serializer.errors)
 
 
-@api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def partial_update(request, pk=None):
-    id = pk
-    areaofwork = Areaofwork.objects.get(pk=id)
-    serializer = AreaofworkSerializer(areaofwork, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'msg': 'Partial Data Updated'})
-    return Response(serializer.errors)
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def delete(request, pk):
     areaofwork = Areaofwork.objects.get(id=pk)
     areaofwork.delete()

@@ -14,8 +14,8 @@ from . import views
 
 
 @api_view(['GET'])
-@permission_required(['view_group'])
-@permission_classes([IsAuthenticated])
+# @permission_required(['view_group'])
+# @permission_classes([IsAuthenticated])
 def group_list(request):
     group = Group.objects.all()
     serializer = GroupSerializer(group, many = True)

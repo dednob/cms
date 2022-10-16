@@ -10,6 +10,7 @@ urlpatterns = [
     path('home/', include('home.urls')),
     path('areaofwork/', include('areaofwork.urls')),
     path('projects/', include('projects.urls')),
+    path('campaigns/', include('campaign.urls')),
 
 
 ]

@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 import uuid
 from areaofwork.models import Areaofwork
@@ -15,5 +16,5 @@ class Projects(models.Model):
     details = models.TextField()
     slug = models.SlugField(max_length=255, null=True, unique=True)
     image = models.ImageField(upload_to=generate_filename, null=True)
-    date = models.DateTimeField(null=True)
-    areaofwork = models.ManyToManyField(Areaofwork)
+    date = models.DateTimeField(  default=datetime.datetime.now)
+    areaofwork = models.ManyToManyField(Areaofwork, related_name='projects')

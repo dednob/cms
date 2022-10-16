@@ -4,10 +4,10 @@ from . import views
 app_name = 'areaofwork'
 
 urlpatterns = [
-    path('aboutus/', views.list),
+    path('list/', views.aow_list),
+    path('detail/<int:pk>', views.aow_detail),
     path('create/', views.create),
     path('update/<int:pk>', views.update),
-    path('partialupdate/<int:pk>', views.partial_update),
     path('delete/<int:pk>', views.delete),
 
 ]

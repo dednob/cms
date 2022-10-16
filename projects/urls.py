@@ -4,10 +4,11 @@ from . import views
 app_name = 'projects'
 
 urlpatterns = [
-    path('projects/', views.list),
+    path('list/', views.list),
     path('create/', views.create),
+    path('details/<int:pk>', views.project_detail),
+    path('byaow/<int:pk>', views.projects_by_aow),
     path('update/<int:pk>', views.update),
-    path('partialupdate/<int:pk>', views.partial_update),
     path('delete/<int:pk>', views.delete),
 
 ]
