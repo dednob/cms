@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from . import views
 
+
 # Create your views here.
 # @permission_classes([IsAuthenticated])
 
@@ -18,9 +19,8 @@ from . import views
 # @permission_classes([IsAuthenticated])
 def group_list(request):
     group = Group.objects.all()
-    serializer = GroupSerializer(group, many = True)
+    serializer = GroupSerializer(group, many=True)
     return Response(serializer.data)
-
 
 
 @api_view(['POST'])
@@ -28,7 +28,7 @@ def group_list(request):
 # @permission_classes([IsAuthenticated])
 def create_group(request):
     name = request.data['name']
-    group = Group(name = name)
+    group = Group(name=name)
     group.save()
     return Response(
         {
@@ -38,35 +38,33 @@ def create_group(request):
         }
     )
 
+
 @api_view(['PATCH'])
 # @permission_required(['change_group'])
 # @permission_classes([IsAuthenticated])
 def update_group(request, pk):
     group_data = request.data
     group = Group.objects.get(id=pk)
-    serializer = GroupSerializer(group, data = group_data, partial = True)
+    serializer = GroupSerializer(group, data=group_data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors)
 
+
 @api_view(['DELETE'])
 # @permission_required(['delete_group'])
 # @permission_classes([IsAuthenticated])
-def delete_blog(request,pk):
+def delete_blog(request, pk):
     group = Group.objects.get(id=pk)
     group.delete()
     return Response('Deleted')
 
 
-
-
-
-#Permission view funtions
+# Permission view funtions
 
 @api_view(['GET'])
 def permission_list(request):
     permissions = Permission.objects.all()
-    serializer = PermissionSerializer(permissions, many = True)
+    serializer = PermissionSerializer(permissions, many=True)
     return Response(serializer.data)
-

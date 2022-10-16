@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group, Permission
 
 
 def user_passes_test(
-    test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME
+        test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME
 ):
     """
     Decorator for views that checks that the user passes the given test,
@@ -24,10 +24,10 @@ def user_passes_test(
             if test_func(request.user):
                 return view_func(request, *args, **kwargs)
             return JsonResponse({
-                'code':400,
-                'message': 'You are not allowed to access this endpoint' 
+                'code': 400,
+                'message': 'You are not allowed to access this endpoint'
 
-                })
+            })
 
         return _wrapped_view
 
@@ -35,7 +35,7 @@ def user_passes_test(
 
 
 def login_required(
-    function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None
+        function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None
 ):
     """
     Decorator for views that checks that the user is logged in, redirecting
@@ -67,8 +67,8 @@ def permission_required(perm, login_url=None, raise_exception=False):
         # First check if the user has the permission (even anon users)
         # if user.has_perms(perms):
         #     return True
-        group_name = Group.objects.get(user = user)
-        if Permission.objects.filter(group__name = group_name, codename__in=perms).exists():
+        group_name = Group.objects.get(user=user)
+        if Permission.objects.filter(group__name=group_name, codename__in=perms).exists():
             return True
         # In case the 403 handler should be called raise the exception
         # if raise_exception:

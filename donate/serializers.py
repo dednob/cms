@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from .models import Home
+from .models import Donate
 
 
-class HomeSerializer(serializers.ModelSerializer):
+class DonateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Home
+        model = Donate
         fields = ['id', 'title', 'details', 'slug', 'image']

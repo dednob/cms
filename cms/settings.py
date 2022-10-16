@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'permission',
     'areaofwork',
     'projects',
-    'campaign'
+    'campaign',
+    'donate',
 ]
 
 MIDDLEWARE = [
