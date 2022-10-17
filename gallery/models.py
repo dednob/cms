@@ -1,6 +1,8 @@
 import datetime
 from django.db import models
 import uuid
+from projects.models import Projects
+from campaign.models import Campaigns
 # from areaofwork.models import Areaofwork
 
 
@@ -16,5 +18,9 @@ class Gallery(models.Model):
     details = models.TextField(null=True, blank=True)
     slug = models.SlugField(max_length=500, null=True, unique=True)
     image = models.ImageField(upload_to=generate_filename, null=True)
+    # project = models.ForeignKey(Projects, default=None, on_delete=models.CASCADE, related_name="gallery")
+    campaign = models.ForeignKey(Campaigns, default=None,null=True, on_delete=models.CASCADE, related_name="gallery")
+
+
     
     

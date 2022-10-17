@@ -11,6 +11,7 @@ urlpatterns = [
     path('areaofwork/', include('areaofwork.urls')),
     path('projects/', include('projects.urls')),
     path('campaigns/', include('campaign.urls')),
+    path('gallery/', include('gallery.urls')),
 
 
 ]
