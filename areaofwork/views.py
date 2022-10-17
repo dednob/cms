@@ -18,11 +18,11 @@ def aow_list(request):
     serializer = AreaofworkSerializer(areaofwork, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
-def aow_detail(request, pk):
-    id = pk
-    if id is not None:
-        aow = Areaofwork.objects.get(id=id)
+def aow_detail(request, slug):
+    if slug is not None:
+        aow = Areaofwork.objects.get(slug=slug)
         serializer = AreaofworkSerializer(aow)
         return Response(serializer.data)
 
@@ -39,7 +39,7 @@ def create(request):
 
     slug = slugify(data['title'])
     suffix = 1
-    
+
     if Areaofwork.objects.filter(title__exact=slug).exists():
         print("yes")
         count = Areaofwork.objects.filter(title__exact=slug).count()
@@ -61,17 +61,17 @@ def create(request):
 
 @api_view(['PATCH'])
 # @permission_classes([IsAuthenticated])
-def update(request, pk):
+def update(request, slugkey):
     data = request.data
     if 'image' in data:
         fmt, img_str = str(data['image']).split(';base64,')
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         data['image'] = img_file
-    
+
     slug = slugify(data['title'])
     suffix = 1
-    
+
     if Areaofwork.objects.filter(title__exact=slug).exists():
         print("yes")
         count = Areaofwork.objects.filter(title__exact=slug).count()
@@ -85,7 +85,7 @@ def update(request, pk):
 
     data['slug'] = slug
 
-    areaofwork = Areaofwork.objects.get(id=pk)
+    areaofwork = Areaofwork.objects.get(slug=slugkey)
     serializer = AreaofworkSerializer(areaofwork, data=data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -93,11 +93,9 @@ def update(request, pk):
     return Response(serializer.errors)
 
 
-
-
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])
-def delete(request, pk):
-    areaofwork = Areaofwork.objects.get(id=pk)
+def delete(request, slug):
+    areaofwork = Areaofwork.objects.get(slug=slug)
     areaofwork.delete()
     return Response('Deleted')

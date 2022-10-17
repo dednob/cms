@@ -18,6 +18,7 @@ def list(request):
     serializer = ProjectsSerializer(project, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def project_detail(request, pk):
     id = pk
@@ -26,14 +27,14 @@ def project_detail(request, pk):
         serializer = ProjectsSerializer(project)
         return Response(serializer.data)
 
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def projects_by_aow(request, pk):
     id = pk
-    project = Projects.objects.filter(areaofwork__id = id)
+    project = Projects.objects.filter(areaofwork__id=id)
     serializer = ProjectsSerializer(project, many=True)
     return Response(serializer.data)
-
 
 
 @api_view(['POST'])
@@ -88,14 +89,12 @@ def update(request, pk):
     else:
         slug = "%s-%s" % (slugify(project_data['title']), suffix)
 
-    project = Projects.objects.get(id=pk)
+    project = Projects.objects.get(slug=pk)
     serializer = ProjectsSerializer(project, data=project_data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors)
-
-
 
 
 @api_view(['DELETE'])

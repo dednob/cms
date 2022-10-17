@@ -6,7 +6,7 @@ app_name = 'donate'
 urlpatterns = [
     path('details/', views.details),
     path('create/', views.create),
-    path('update/<int:pk>', views.update),
-    path('delete/<int:pk>', views.delete),
+    path('update/<str:slugkey>', views.update),
+    path('delete/<str:slug>', views.delete),
 
 ]

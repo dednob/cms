@@ -18,21 +18,23 @@ def list(request):
     serializer = GallerySerializer(gallery, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
-def gallery_detail(request, pk):
-    id = pk
-    if id is not None:
-        gallery = Gallery.objects.get(id=id)
+def gallery_detail(request, slug):
+    if slug is not None:
+        gallery = Gallery.objects.get(slug=slug)
         serializer = GallerySerializer(gallery)
         return Response(serializer.data)
 
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def gallery_by_camp(request, pk):
-    campaign_id = pk
-    gallery  = Gallery.objects.filter(campaign = campaign_id)
+def gallery_by_camp(request, slug):
+    # campaign_id = pk
+    gallery = Gallery.objects.filter(campaign__slug=slug)
     serializer = GallerySerializer(gallery, many=True)
     return Response(serializer.data)
+
 
 # @api_view(['GET'])
 # # @permission_classes([IsAuthenticated])
@@ -41,7 +43,6 @@ def gallery_by_camp(request, pk):
 #     project = Projects.objects.filter(areaofwork__id = id)
 #     serializer = ProjectsSerializer(project, many=True)
 #     return Response(serializer.data)
-
 
 
 @api_view(['POST'])
@@ -78,7 +79,7 @@ def upload(request):
 
 @api_view(['PATCH'])
 # @permission_classes([IsAuthenticated])
-def update(request, pk):
+def update(request, slugkey):
     gallery_data = request.data
     if 'image' in gallery_data:
         fmt, img_str = str(gallery_data['image']).split(';base64,')
@@ -98,7 +99,7 @@ def update(request, pk):
     else:
         slug = "%s-%s" % (slugify(gallery_data['title']), suffix)
 
-    project = Gallery.objects.get(id=pk)
+    project = Gallery.objects.get(slug=slugkey)
     serializer = GallerySerializer(project, data=gallery_data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -106,11 +107,9 @@ def update(request, pk):
     return Response(serializer.errors)
 
 
-
-
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])
-def delete(request, pk):
-    project = Gallery.objects.get(id=pk)
+def delete(request, slug):
+    project = Gallery.objects.get(slug=slug)
     project.delete()
     return Response('Deleted')

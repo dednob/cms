@@ -42,9 +42,9 @@ def create_group(request):
 @api_view(['PATCH'])
 # @permission_required(['change_group'])
 # @permission_classes([IsAuthenticated])
-def update_group(request, pk):
+def update_group(request, slug):
     group_data = request.data
-    group = Group.objects.get(id=pk)
+    group = Group.objects.get(slug=slug)
     serializer = GroupSerializer(group, data=group_data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -55,8 +55,8 @@ def update_group(request, pk):
 @api_view(['DELETE'])
 # @permission_required(['delete_group'])
 # @permission_classes([IsAuthenticated])
-def delete_blog(request, pk):
-    group = Group.objects.get(id=pk)
+def delete_blog(request, slug):
+    group = Group.objects.get(slug=slug)
     group.delete()
     return Response('Deleted')
 
