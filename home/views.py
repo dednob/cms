@@ -16,7 +16,7 @@ def home_details(request):
 
 
 @api_view(['POST'])
-#@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_home(request):
     data = request.data
     if 'image' in data:
@@ -46,8 +46,8 @@ def create_home(request):
 
 
 @api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def update_home(request, pk):
+# @permission_classes([IsAuthenticated])
+def update(request, slugkey):
     data = request.data
     if 'image' in data:
         fmt, img_str = str(data['image']).split(';base64,')
@@ -55,7 +55,23 @@ def update_home(request, pk):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         data['image'] = img_file
 
-    home = Home.objects.get(id=pk)
+    slug = slugify(data['title'])
+    suffix = 1
+
+    if Home.objects.filter(title__exact=slug).exists():
+        print("yes")
+        count = Home.objects.filter(title__exact=slug).count()
+        print(count)
+        suffix += count
+        print("yes")
+        slug = "%s-%s" % (slugify(data['title']), suffix)
+
+    else:
+        slug = "%s-%s" % (slugify(data['title']), suffix)
+
+    data['slug'] = slug
+
+    home = Home.objects.get(slug=slugkey)
     serializer = HomeSerializer(home, data=data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -77,7 +93,7 @@ def update_home(request, pk):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def delete_home(request, pk):
-    home = Home.objects.get(id=pk)
+def delete_home(request, slug):
+    home = Home.objects.get(slug=slug)
     home.delete()
     return Response('Deleted')

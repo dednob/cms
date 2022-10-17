@@ -50,7 +50,7 @@ def create(request):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
-def update(request, pk):
+def update(request, slug):
     data = request.data
     if 'image' in data:
         fmt, img_str = str(data['image']).split(';base64,')
@@ -58,7 +58,7 @@ def update(request, pk):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         data['image'] = img_file
 
-    aboutus = Aboutus.objects.get(id=pk)
+    aboutus = Aboutus.objects.get(slug=slug)
     serializer = AboutusSerializer(aboutus, data=data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -66,21 +66,21 @@ def update(request, pk):
     return Response(serializer.errors)
 
 
-@api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def partial_update(request, pk=None):
-    id = pk
-    aboutus = Aboutus.objects.get(pk=id)
-    serializer = AboutusSerializer(aboutus, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'msg': 'Partial Data Updated'})
-    return Response(serializer.errors)
+# @api_view(['PATCH'])
+# @permission_classes([IsAuthenticated])
+# def partial_update(request, pk=None):
+#     id = pk
+#     aboutus = Aboutus.objects.get(pk=id)
+#     serializer = AboutusSerializer(aboutus, data=request.data, partial=True)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response({'msg': 'Partial Data Updated'})
+#     return Response(serializer.errors)
 
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def delete(request, pk):
-    aboutus = Aboutus.objects.get(id=pk)
+def delete(request, slug):
+    aboutus = Aboutus.objects.get(slug=slug)
     aboutus.delete()
     return Response('Deleted')

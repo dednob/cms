@@ -18,22 +18,23 @@ def list(request):
     serializer = CampaignsSerializer(campaigns, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
-def campaign_detail(request, pk):
-    id = pk
-    if id is not None:
-        campaigns = Campaigns.objects.get(id=id)
+def campaign_detail(request, slug):
+
+    if slug is not None:
+        campaigns = Campaigns.objects.get(slug=slug)
         serializer = CampaignsSerializer(campaigns)
         return Response(serializer.data)
 
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def campaigns_by_projects(request, pk):
-    id = pk
-    campaigns = Campaigns.objects.filter(projects__id = id)
+def campaigns_by_projects(request, slug):
+
+    campaigns = Campaigns.objects.filter(projects__slug=slug)
     serializer = CampaignsSerializer(campaigns, many=True)
     return Response(serializer.data)
-
 
 
 @api_view(['POST'])
@@ -68,7 +69,7 @@ def create(request):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
-def update(request, pk):
+def update(request, slugkey):
     campaign_data = request.data
     if 'image' in campaign_data:
         fmt, img_str = str(campaign_data['image']).split(';base64,')
@@ -88,7 +89,7 @@ def update(request, pk):
     else:
         slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
 
-    project = Campaigns.objects.get(id=pk)
+    project = Campaigns.objects.get(slug=slugkey)
     serializer = CampaignsSerializer(project, data=campaign_data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -96,11 +97,9 @@ def update(request, pk):
     return Response(serializer.errors)
 
 
-
-
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])
-def delete(request, pk):
-    campaign = Campaigns.objects.get(id=pk)
+def delete(request, slug):
+    campaign = Campaigns.objects.get(slug=slug)
     campaign.delete()
     return Response('Deleted')

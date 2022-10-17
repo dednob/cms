@@ -55,7 +55,7 @@ def create(request):
 
 @api_view(['PATCH'])
 # @permission_classes([IsAuthenticated])
-def update(request, pk):
+def update(request, slugkey):
     data = request.data
     if 'image' in data:
         fmt, img_str = str(data['image']).split(';base64,')
@@ -79,7 +79,7 @@ def update(request, pk):
 
     data['slug'] = slug
 
-    donate = Donate.objects.get(id=pk)
+    donate = Donate.objects.get(slug=slugkey)
     serializer = Donate(donate, data=data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -89,7 +89,7 @@ def update(request, pk):
 
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])
-def delete(request, pk):
-    donate = Donate.objects.get(id=pk)
+def delete(request, slug):
+    donate = Donate.objects.get(slug=slug)
     donate.delete()
     return Response('Deleted')
