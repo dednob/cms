@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from django.shortcuts import render
 from .models import Campaigns
 from .serializers import CampaignsSerializer
@@ -21,7 +22,7 @@ def list(request):
 @api_view(['GET'])
 def campaign_detail(request, pk):
     id = pk
-    if id is not None:
+    if id is not NULL:
         campaigns = Campaigns.objects.get(id=id)
         serializer = CampaignsSerializer(campaigns)
         return Response(serializer.data)
