@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Projects
-from .serializers import ProjectsSerializer
+from .serializers import ProjectsSerializer, ProjectsListSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -15,24 +15,24 @@ from django.core.files.base import ContentFile
 # @permission_classes([IsAuthenticated])
 def list(request):
     project = Projects.objects.all()
-    serializer = ProjectsSerializer(project, many=True)
+    serializer = ProjectsListSerializer(project, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def project_detail(request, pk):
-    id = pk
+def project_detail(request, slug):
+    slug = slug
     if id is not None:
-        project = Projects.objects.get(id=id)
+        project = Projects.objects.get(slug=slug)
         serializer = ProjectsSerializer(project)
         return Response(serializer.data)
 
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def projects_by_aow(request, pk):
-    id = pk
-    project = Projects.objects.filter(areaofwork__id=id)
+def projects_by_aow(request, slug):
+    id = slug
+    project = Projects.objects.filter(areaofwork__slug=slug)
     serializer = ProjectsSerializer(project, many=True)
     return Response(serializer.data)
 
@@ -69,7 +69,7 @@ def create(request):
 
 @api_view(['PATCH'])
 # @permission_classes([IsAuthenticated])
-def update(request, pk):
+def update(request, slugkey):
     project_data = request.data
     if 'image' in project_data:
         fmt, img_str = str(project_data['image']).split(';base64,')
@@ -89,7 +89,7 @@ def update(request, pk):
     else:
         slug = "%s-%s" % (slugify(project_data['title']), suffix)
 
-    project = Projects.objects.get(slug=pk)
+    project = Projects.objects.get(slug=slugkey)
     serializer = ProjectsSerializer(project, data=project_data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -99,7 +99,7 @@ def update(request, pk):
 
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])
-def delete(request, pk):
-    project = Projects.objects.get(id=pk)
+def delete(request, slug):
+    project = Projects.objects.get(slug=slug)
     project.delete()
     return Response('Deleted')

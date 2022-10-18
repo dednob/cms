@@ -9,3 +9,8 @@ class AreaofworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Areaofwork
         fields = ['id', 'title', 'details', 'slug', 'image', 'projects']
+
+class AreaofworkReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Areaofwork
+        fields = ['id', 'title', 'details', 'slug', 'image']
