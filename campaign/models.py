@@ -14,6 +14,7 @@ def generate_filename(instance, filename):
 class Campaigns(models.Model):
     title = models.CharField(max_length=500)
     details = models.TextField()
+    description = models.TextField(null=True)
     slug = models.SlugField(max_length=255, null=True, unique=True)
     image = models.ImageField(upload_to=generate_filename, null=True)
     date = models.DateTimeField( auto_now_add=True, blank=True)
