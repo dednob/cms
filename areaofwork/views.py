@@ -31,6 +31,7 @@ def aow_detail(request, slug):
 # @permission_classes([IsAuthenticated])
 def create(request):
     data = request.data
+    slug = None
     if 'image' in data:
         fmt, img_str = str(data['image']).split(';base64,')
         ext = fmt.split('/')[-1]
@@ -39,6 +40,8 @@ def create(request):
 
     slug = slugify(data['title'])
     suffix = 1
+    print(data['title'])
+    print(slug)
 
     if Areaofwork.objects.filter(title__exact=slug).exists():
         print("yes")
@@ -49,6 +52,7 @@ def create(request):
         slug = "%s-%s" % (slugify(data['title']), suffix)
 
     else:
+        print("No")
         slug = "%s-%s" % (slugify(data['title']), suffix)
 
     data['slug'] = slug
