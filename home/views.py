@@ -6,7 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils.text import slugify
 import base64
 from django.core.files.base import ContentFile
-
+from areaofwork .models import Areaofwork
+from campaign .models import Campaigns
+from projects .models import Projects
 
 @api_view(['GET'])
 def home_details(request):
@@ -14,6 +16,15 @@ def home_details(request):
     serializer = HomeSerializer(home, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def experience_details(request):
+    return Response({
+        'Establish year': "1900",
+        "AreaofWork": Areaofwork.objects.all().count(),
+        "Campaigns": Campaigns.objects.all().count(),
+        "Projects": Projects.objects.all().count()
+
+    })
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -43,7 +54,7 @@ def create_home(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
-
+    return Response(serializer.errors)
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
