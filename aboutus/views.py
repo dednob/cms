@@ -31,8 +31,8 @@ def create(request):
 
     slug = slugify(data['title'])
     suffix = 1
-    if Aboutus.objects.filter(title__exact=slug).exists():
-        count = Aboutus.objects.filter(title__exact=slug).count()
+    if Aboutus.objects.filter(slug__exact=slug).exists():
+        count = Aboutus.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")
@@ -57,6 +57,20 @@ def update(request, slug):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         data['image'] = img_file
+
+    slug = slugify(data['title'])
+    suffix = 1
+    if Aboutus.objects.filter(slug__exact=slug).exists():
+        count = Aboutus.objects.filter(slug__exact=slug).count()
+        print(count)
+        suffix += count
+        print("yes")
+        slug = "%s-%s" % (slugify(data['title']), suffix)
+
+    else:
+        slug = "%s-%s" % (slugify(data['title']), suffix)
+
+    data['slug'] = slug
 
     aboutus = Aboutus.objects.get(slug=slug)
     serializer = AboutusSerializer(aboutus, data=data, partial=True)

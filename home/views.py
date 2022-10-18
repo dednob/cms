@@ -28,8 +28,8 @@ def create_home(request):
     slug = slugify(data['title'])
     suffix = 1
 
-    if Home.objects.filter(title__exact=slug).exists():
-        count = Home.objects.filter(title__exact=slug).count()
+    if Home.objects.filter(slug__exact=slug).exists():
+        count = Home.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")
@@ -58,9 +58,9 @@ def update(request, slugkey):
     slug = slugify(data['title'])
     suffix = 1
 
-    if Home.objects.filter(title__exact=slug).exists():
+    if Home.objects.filter(slug__exact=slug).exists():
         print("yes")
-        count = Home.objects.filter(title__exact=slug).count()
+        count = Home.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")

@@ -57,8 +57,8 @@ def upload(request):
 
     slug = slugify(gallery_data['title'])
     suffix = 1
-    if Gallery.objects.filter(title__exact=slug).exists():
-        count = Gallery.objects.filter(title__exact=slug).count()
+    if Gallery.objects.filter(slug__exact=slug).exists():
+        count = Gallery.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")
@@ -89,8 +89,8 @@ def update(request, slugkey):
 
     slug = slugify(gallery_data['title'])
     suffix = 1
-    if Gallery.objects.filter(title__exact=slug).exists():
-        count = Gallery.objects.filter(title__exact=slug).count()
+    if Gallery.objects.filter(slug__exact=slug).exists():
+        count = Gallery.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")
