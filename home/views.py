@@ -39,8 +39,8 @@ def create_home(request):
     slug = slugify(data['title'])
     suffix = 1
 
-    if Home.objects.filter(slug__exact=slug).exists():
-        count = Home.objects.filter(slug__exact=slug).count()
+    if Home.objects.filter(title__exact=data['title']).exists():
+        count = Home.objects.filter(title__exact=data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -55,6 +55,10 @@ def create_home(request):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors)
+<<<<<<< HEAD
+=======
+
+>>>>>>> eed35fcefab2e15f90b688a8e945612f55ac7a25
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
@@ -69,9 +73,9 @@ def update(request, slugkey):
     slug = slugify(data['title'])
     suffix = 1
 
-    if Home.objects.filter(slug__exact=slug).exists():
+    if Home.objects.filter(title__exact=data['title']).exists():
         print("yes")
-        count = Home.objects.filter(slug__exact=slug).count()
+        count = Home.objects.filter(title__exact=data['title']).count()
         print(count)
         suffix += count
         print("yes")
