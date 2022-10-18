@@ -55,10 +55,7 @@ def create_home(request):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors)
-<<<<<<< HEAD
-=======
 
->>>>>>> eed35fcefab2e15f90b688a8e945612f55ac7a25
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
@@ -91,7 +88,8 @@ def update(request, slugkey):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
-    return Response(serializer.errors)
+    
+
 
 
 # @api_view(['PATCH'])
