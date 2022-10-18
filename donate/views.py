@@ -34,9 +34,9 @@ def create(request):
     slug = slugify(data['title'])
     suffix = 1
 
-    if Donate.objects.filter(title__exact=slug).exists():
+    if Donate.objects.filter(slug__exact=slug).exists():
         print("yes")
-        count = Donate.objects.filter(title__exact=slug).count()
+        count = Donate.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")
@@ -66,9 +66,9 @@ def update(request, slugkey):
     slug = slugify(data['title'])
     suffix = 1
 
-    if Donate.objects.filter(title__exact=slug).exists():
+    if Donate.objects.filter(slug__exact=slug).exists():
         print("yes")
-        count = Donate.objects.filter(title__exact=slug).count()
+        count = Donate.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")

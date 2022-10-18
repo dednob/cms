@@ -58,8 +58,8 @@ def create(request):
 
     slug = slugify(campaign_data['title'])
     suffix = 1
-    if Campaigns.objects.filter(title__exact=slug).exists():
-        count = Campaigns.objects.filter(title__exact=slug).count()
+    if Campaigns.objects.filter(slug__exact=slug).exists():
+        count = Campaigns.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")
@@ -88,8 +88,8 @@ def update(request, slugkey):
 
     slug = slugify(campaign_data['title'])
     suffix = 1
-    if Campaigns.objects.filter(title__exact=slug).exists():
-        count = Campaigns.objects.filter(title__exact=slug).count()
+    if Campaigns.objects.filter(slug__exact=slug).exists():
+        count = Campaigns.objects.filter(slug__exact=slug).count()
         print(count)
         suffix += count
         print("yes")
