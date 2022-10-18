@@ -43,6 +43,7 @@ def create_home(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
+    return Response(serializer.errors)
 
 
 @api_view(['PATCH'])
