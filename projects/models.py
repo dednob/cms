@@ -18,7 +18,7 @@ class Projects(models.Model):
     image = models.ImageField(upload_to=generate_filename, null=True)
     date = models.DateTimeField(default=datetime.datetime.now)
     areaofwork = models.ManyToManyField(Areaofwork, related_name='projects')
-
+    featured = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
         return self.title

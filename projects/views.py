@@ -31,7 +31,6 @@ def project_detail(request, slug):
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def projects_by_aow(request, slug):
-    id = slug
     project = Projects.objects.filter(areaofwork__slug=slug)
     serializer = ProjectsSerializer(project, many=True)
     return Response(serializer.data)
@@ -103,3 +102,10 @@ def delete(request, slug):
     project = Projects.objects.get(slug=slug)
     project.delete()
     return Response('Deleted')
+
+
+@api_view(['GET'])
+def featured_project(request):
+    project = Projects.objects.filter(featured=True)
+    serializer = ProjectsListSerializer(project, many=True)
+    return Response(serializer.data)

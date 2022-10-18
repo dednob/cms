@@ -10,5 +10,6 @@ urlpatterns = [
     path('byaow/<str:slug>', views.projects_by_aow),
     path('update/<str:slugKey>', views.update),
     path('delete/<str:slug>', views.delete),
+    path('featured/', views.featured_project),
 
 ]
