@@ -22,7 +22,7 @@ def details(request):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create(request):
     data = request.data
     if 'image' in data:
@@ -34,9 +34,9 @@ def create(request):
     slug = slugify(data['title'])
     suffix = 1
 
-    if Donate.objects.filter(slug__exact=slug).exists():
+    if Donate.objects.filter(title__exact=data['title']).exists():
         print("yes")
-        count = Donate.objects.filter(slug__exact=slug).count()
+        count = Donate.objects.filter(title__exact=data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -54,7 +54,7 @@ def create(request):
 
 
 @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def update(request, slugkey):
     data = request.data
     if 'image' in data:
@@ -66,9 +66,9 @@ def update(request, slugkey):
     slug = slugify(data['title'])
     suffix = 1
 
-    if Donate.objects.filter(slug__exact=slug).exists():
+    if Donate.objects.filter(title__exact=data['title']).exists():
         print("yes")
-        count = Donate.objects.filter(slug__exact=slug).count()
+        count = Donate.objects.filter(title__exact=data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -88,7 +88,7 @@ def update(request, slugkey):
 
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def delete(request, slug):
     donate = Donate.objects.get(slug=slug)
     donate.delete()

@@ -37,7 +37,7 @@ def projects_by_aow(request, slug):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create(request):
     project_data = request.data
     if 'image' in project_data:
@@ -67,7 +67,7 @@ def create(request):
 
 
 @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def update(request, slugkey):
     project_data = request.data
     if 'image' in project_data:
@@ -99,7 +99,7 @@ def update(request, slugkey):
 
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def delete(request, slug):
     project = Projects.objects.get(slug=slug)
     project.delete()

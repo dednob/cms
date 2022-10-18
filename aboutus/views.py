@@ -31,8 +31,8 @@ def create(request):
 
     slug = slugify(data['title'])
     suffix = 1
-    if Aboutus.objects.filter(slug__exact=slug).exists():
-        count = Aboutus.objects.filter(slug__exact=slug).count()
+    if Aboutus.objects.filter(title__exact=data['title']).exists():
+        count = Aboutus.objects.filter(title__exact=data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -60,8 +60,8 @@ def update(request, slug):
 
     slug = slugify(data['title'])
     suffix = 1
-    if Aboutus.objects.filter(slug__exact=slug).exists():
-        count = Aboutus.objects.filter(slug__exact=slug).count()
+    if Aboutus.objects.filter(title__exact=data['title']).exists():
+        count = Aboutus.objects.filter(title__exact=data['title']).count()
         print(count)
         suffix += count
         print("yes")

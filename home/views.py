@@ -16,7 +16,7 @@ def home_details(request):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create_home(request):
     data = request.data
     if 'image' in data:
@@ -46,7 +46,7 @@ def create_home(request):
 
 
 @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def update(request, slugkey):
     data = request.data
     if 'image' in data:

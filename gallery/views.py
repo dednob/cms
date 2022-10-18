@@ -46,7 +46,7 @@ def gallery_by_camp(request, slug):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def upload(request):
     gallery_data = request.data
     if 'image' in gallery_data:
@@ -78,7 +78,7 @@ def upload(request):
 
 
 @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def update(request, slugkey):
     gallery_data = request.data
     if 'image' in gallery_data:
@@ -90,7 +90,7 @@ def update(request, slugkey):
     # slug = slugify(gallery_data['title'])
     suffix = 1
     if Gallery.objects.filter(title__exact=gallery_data['title']).exists():
-        count = Gallery.objects.filter(slug__exact=gallery_data['title']).count()
+        count = Gallery.objects.filter(title__exact=gallery_data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -109,7 +109,7 @@ def update(request, slugkey):
 
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def delete(request, slug):
     project = Gallery.objects.get(slug=slug)
     project.delete()

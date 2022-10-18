@@ -15,8 +15,8 @@ from . import views
 
 
 @api_view(['GET'])
-# @permission_required(['view_group'])
-# @permission_classes([IsAuthenticated])
+@permission_required(['view_group'])
+@permission_classes([IsAuthenticated])
 def group_list(request):
     group = Group.objects.all()
     serializer = GroupSerializer(group, many=True)
@@ -24,8 +24,8 @@ def group_list(request):
 
 
 @api_view(['POST'])
-# @permission_required(['add_group'])
-# @permission_classes([IsAuthenticated])
+@permission_required(['add_group'])
+@permission_classes([IsAuthenticated])
 def create_group(request):
     name = request.data['name']
     group = Group(name=name)
@@ -40,8 +40,8 @@ def create_group(request):
 
 
 @api_view(['PATCH'])
-# @permission_required(['change_group'])
-# @permission_classes([IsAuthenticated])
+@permission_required(['change_group'])
+@permission_classes([IsAuthenticated])
 def update_group(request, slug):
     group_data = request.data
     group = Group.objects.get(slug=slug)
@@ -53,8 +53,8 @@ def update_group(request, slug):
 
 
 @api_view(['DELETE'])
-# @permission_required(['delete_group'])
-# @permission_classes([IsAuthenticated])
+@permission_required(['delete_group'])
+@permission_classes([IsAuthenticated])
 def delete_blog(request, slug):
     group = Group.objects.get(slug=slug)
     group.delete()

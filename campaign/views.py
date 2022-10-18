@@ -22,7 +22,6 @@ def list(request):
 
 @api_view(['GET'])
 def campaign_detail(request, slug):
-
     if slug is not None:
         campaigns = Campaigns.objects.get(slug=slug)
         serializer = CampaignsSerializer(campaigns)
@@ -32,23 +31,21 @@ def campaign_detail(request, slug):
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def campaigns_by_projects(request, slug):
-
     campaigns = Campaigns.objects.filter(projects__slug=slug)
     serializer = CampaignsSerializer(campaigns, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def related_by_projects(request, slug, pk):
-
-    campaigns = Campaigns.objects.filter(projects__slug=slug).exclude(id = pk)
+    campaigns = Campaigns.objects.filter(projects__slug=slug).exclude(id=pk)
     serializer = CampaignsSerializer(campaigns, many=True)
     return Response(serializer.data)
 
 
-
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create(request):
     campaign_data = request.data
     if 'image' in campaign_data:
@@ -78,7 +75,7 @@ def create(request):
 
 
 @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def update(request, slugkey):
     campaign_data = request.data
     if 'image' in campaign_data:
@@ -98,7 +95,7 @@ def update(request, slugkey):
 
     else:
         slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
-    
+
     campaign_data['slug'] = slug
 
     campaign = Campaigns.objects.get(slug=slugkey)
@@ -110,7 +107,7 @@ def update(request, slugkey):
 
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def delete(request, slug):
     campaign = Campaigns.objects.get(slug=slug)
     campaign.delete()

@@ -28,7 +28,7 @@ def aow_detail(request, slug):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create(request):
     data = request.data
     slug = None
@@ -64,7 +64,7 @@ def create(request):
 
 
 @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def update(request, slugkey):
     data = request.data
     if 'image' in data:
@@ -98,7 +98,7 @@ def update(request, slugkey):
 
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def delete(request, slug):
     areaofwork = Areaofwork.objects.get(slug=slug)
     areaofwork.delete()
