@@ -38,14 +38,14 @@ def create(request):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         data['image'] = img_file
 
-    slug = slugify(data['title'])
+    # slug = slugify(data['title'])
     suffix = 1
     print(data['title'])
     print(slug)
 
-    if Areaofwork.objects.filter(slug__exact=slug).exists():
+    if Areaofwork.objects.filter(title__exact=data['title']).exists():
         print("yes")
-        count = Areaofwork.objects.filter(slug__exact=slug).count()
+        count = Areaofwork.objects.filter(title__exact=data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -73,12 +73,12 @@ def update(request, slugkey):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         data['image'] = img_file
 
-    slug = slugify(data['title'])
+    # slug = slugify(data['title'])
     suffix = 1
 
-    if Areaofwork.objects.filter(slug__exact=slug).exists():
+    if Areaofwork.objects.filter(title__exact=data['title']).exists():
         print("yes")
-        count = Areaofwork.objects.filter(slug__exact=slug).count()
+        count = Areaofwork.objects.filter(title__exact=data['title']).count()
         print(count)
         suffix += count
         print("yes")

@@ -48,8 +48,8 @@ def create(request):
 
     slug = slugify(project_data['title'])
     suffix = 1
-    if Projects.objects.filter(slug__exact=slug).exists():
-        count = Projects.objects.filter(slug__exact=slug).count()
+    if Projects.objects.filter(title__exact=project_data['title']).exists():
+        count = Projects.objects.filter(title__exact=project_data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -76,10 +76,10 @@ def update(request, slugkey):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         project_data['image'] = img_file
 
-    slug = slugify(project_data['title'])
+    # slug = slugify(project_data['title'])
     suffix = 1
-    if Projects.objects.filter(slug__exact=slug).exists():
-        count = Projects.objects.filter(slug__exact=slug).count()
+    if Projects.objects.filter(title__exact=project_data['title']).exists():
+        count = Projects.objects.filter(title__exact=project_data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -87,6 +87,8 @@ def update(request, slugkey):
 
     else:
         slug = "%s-%s" % (slugify(project_data['title']), suffix)
+
+    project_data['slug'] = slug
 
     project = Projects.objects.get(slug=slugkey)
     serializer = ProjectsSerializer(project, data=project_data, partial=True)

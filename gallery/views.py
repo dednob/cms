@@ -55,10 +55,10 @@ def upload(request):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         gallery_data['image'] = img_file
 
-    slug = slugify(gallery_data['title'])
+    # slug = slugify(gallery_data['title'])
     suffix = 1
-    if Gallery.objects.filter(slug__exact=slug).exists():
-        count = Gallery.objects.filter(slug__exact=slug).count()
+    if Gallery.objects.filter(title__exact=gallery_data['title']).exists():
+        count = Gallery.objects.filter(title__exact=gallery_data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -87,10 +87,10 @@ def update(request, slugkey):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         gallery_data['image'] = img_file
 
-    slug = slugify(gallery_data['title'])
+    # slug = slugify(gallery_data['title'])
     suffix = 1
-    if Gallery.objects.filter(slug__exact=slug).exists():
-        count = Gallery.objects.filter(slug__exact=slug).count()
+    if Gallery.objects.filter(title__exact=gallery_data['title']).exists():
+        count = Gallery.objects.filter(slug__exact=gallery_data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -98,9 +98,10 @@ def update(request, slugkey):
 
     else:
         slug = "%s-%s" % (slugify(gallery_data['title']), suffix)
+    gallery_data['slug'] = slug
 
-    project = Gallery.objects.get(slug=slugkey)
-    serializer = GallerySerializer(project, data=gallery_data, partial=True)
+    gallery = Gallery.objects.get(slug=slugkey)
+    serializer = GallerySerializer(gallery, data=gallery_data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

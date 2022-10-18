@@ -39,11 +39,12 @@ def campaigns_by_projects(request, slug):
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def related_campaigns(request, slug):
+def related_by_projects(request, slug, pk):
 
-    campaigns = Campaigns.objects.filter(projects__slug=slug)
+    campaigns = Campaigns.objects.filter(projects__slug=slug).exclude(id = pk)
     serializer = CampaignsSerializer(campaigns, many=True)
     return Response(serializer.data)
+
 
 
 @api_view(['POST'])
@@ -56,10 +57,10 @@ def create(request):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         campaign_data['image'] = img_file
 
-    slug = slugify(campaign_data['title'])
+    # slug = slugify(campaign_data['title'])
     suffix = 1
-    if Campaigns.objects.filter(slug__exact=slug).exists():
-        count = Campaigns.objects.filter(slug__exact=slug).count()
+    if Campaigns.objects.filter(title__exact=campaign_data['title']).exists():
+        count = Campaigns.objects.filter(title__exact=campaign_data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -77,7 +78,7 @@ def create(request):
 
 
 @api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update(request, slugkey):
     campaign_data = request.data
     if 'image' in campaign_data:
@@ -86,10 +87,10 @@ def update(request, slugkey):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         campaign_data['image'] = img_file
 
-    slug = slugify(campaign_data['title'])
+    # slug = slugify(campaign_data['title'])
     suffix = 1
-    if Campaigns.objects.filter(slug__exact=slug).exists():
-        count = Campaigns.objects.filter(slug__exact=slug).count()
+    if Campaigns.objects.filter(title__exact=campaign_data['title']).exists():
+        count = Campaigns.objects.filter(title__exact=campaign_data['title']).count()
         print(count)
         suffix += count
         print("yes")
@@ -97,9 +98,11 @@ def update(request, slugkey):
 
     else:
         slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
+    
+    campaign_data['slug'] = slug
 
-    project = Campaigns.objects.get(slug=slugkey)
-    serializer = CampaignsSerializer(project, data=campaign_data, partial=True)
+    campaign = Campaigns.objects.get(slug=slugkey)
+    serializer = CampaignsSerializer(campaign, data=campaign_data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
