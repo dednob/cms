@@ -9,24 +9,30 @@ from projects.models import *
 class CampaignsSerializer(serializers.ModelSerializer):
     
     gallery = GallerySerializer(many=True, read_only=True)
+    projects = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='slug'
+     )
 
     class Meta:
         model = Campaigns
         fields = ['id', 'title', 'details','description', 'slug', 'image', 'date','projects', 'gallery']
 
 
-class CampaignsReadSerializer(serializers.ModelSerializer):
+# class CampaignsReadSerializer(serializers.ModelSerializer):
     
-    gallery = GallerySerializer(many=True, read_only=True)
-    # projects = serializers.SerializerMethodField('to_representation')
+#     gallery = GallerySerializer(many=True, read_only=True)
+#     projects = ProjectsSerializer(many=True, read_only=True)
 
-    # def projects_detail(self, obj): 
-    #     project_instance = Projects.objects.get(id=obj.projects.id)
-    #     return ProjectsListSerializer(project_instance).data
+#     def projects_detail(self, obj): 
+#         print(list(obj))
+#         project_instance = Projects.objects.get(id=obj.projects.id)
+#         return ProjectsListSerializer(project_instance).data
 
-    class Meta:
-        model = Campaigns
-        fields = '__all__'
+#     class Meta:
+#         model = Campaigns
+#         fields = ['id', 'title', 'details','description', 'slug', 'image', 'date', 'projects', 'gallery']
 
     # def to_representation(self, instance):
     #     rep = super().to_representation(instance)
