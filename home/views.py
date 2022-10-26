@@ -1,20 +1,22 @@
 from .models import Home
-from .serializers import HomeSerializer
+from .serializers import HomeSerializer, HomeExperienceSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils.text import slugify
 import base64
 from django.core.files.base import ContentFile
-from areaofwork .models import Areaofwork
-from campaign .models import Campaigns
-from projects .models import Projects
+from areaofwork.models import Areaofwork
+from campaign.models import Campaigns
+from projects.models import Projects
+
 
 @api_view(['GET'])
 def home_details(request):
-    home = Home.objects.get(active= True)
+    home = Home.objects.get(active=True)
     serializer = HomeSerializer(home)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 def home_list(request):
@@ -22,12 +24,13 @@ def home_list(request):
     serializer = HomeSerializer(home, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def toggle_active_status(request, pk):
-    home = Home.objects.get(id = pk)
+    home = Home.objects.get(id=pk)
     home.active = True
     home.save()
-    home_list = Home.objects.exclude(id = pk)
+    home_list = Home.objects.exclude(id=pk)
     for home in home_list:
         home.active = False
         home.save()
@@ -35,19 +38,21 @@ def toggle_active_status(request, pk):
     serializer = HomeSerializer(home_list, many=True)
 
     return Response(serializer.data)
-    
-    
 
 
 @api_view(['GET'])
 def experience_details(request):
-    return Response({
-        'Establish year': "1900",
-        "AreaofWork": Areaofwork.objects.all().count(),
-        "Campaigns": Campaigns.objects.all().count(),
-        "Projects": Projects.objects.all().count()
+    # return Response({
+    #     'Establish year': "1900",
+    #     "AreaofWork": Areaofwork.objects.all().count(),
+    #     "Campaigns": Campaigns.objects.all().count(),
+    #     "Projects": Projects.objects.all().count()
+    #
+    # })
+    home = Home.objects.get(active=True)
+    serializer = HomeExperienceSerializer(home)
+    return Response(serializer.data)
 
-    })
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -111,8 +116,6 @@ def update(request, slugkey):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
-    
-
 
 
 # @api_view(['PATCH'])

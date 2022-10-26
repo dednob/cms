@@ -9,7 +9,8 @@ urlpatterns = [
     path('details/<str:slug>', views.gallery_detail),
     path('byCampaign/<str:slug>', views.gallery_by_camp),
     # path('byaow/<int:pk>', views.projects_by_aow),
-    path('update/<str:slugkey>', views.update),
+    path('update/<str:slugkey'
+         '>', views.update),
     path('delete/<str:slug>', views.delete),
 
 ]

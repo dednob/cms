@@ -1,4 +1,4 @@
-from asyncio.windows_events import NULL
+
 from django.shortcuts import render
 from .models import Campaigns
 from .serializers import CampaignsSerializer, CampaignsListSerializer
