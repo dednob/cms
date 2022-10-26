@@ -12,9 +12,32 @@ from projects .models import Projects
 
 @api_view(['GET'])
 def home_details(request):
+    home = Home.objects.get(active= True)
+    serializer = HomeSerializer(home)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def home_list(request):
     home = Home.objects.all()
     serializer = HomeSerializer(home, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def toggle_active_status(request, pk):
+    home = Home.objects.get(id = pk)
+    home.active = True
+    home.save()
+    home_list = Home.objects.exclude(id = pk)
+    for home in home_list:
+        home.active = False
+        home.save()
+
+    serializer = HomeSerializer(home_list, many=True)
+
+    return Response(serializer.data)
+    
+    
+
 
 @api_view(['GET'])
 def experience_details(request):

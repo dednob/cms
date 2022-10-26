@@ -1,7 +1,7 @@
 from asyncio.windows_events import NULL
 from django.shortcuts import render
 from .models import Campaigns
-from .serializers import CampaignsSerializer, CampaignsListSerializer
+from .serializers import CampaignsSerializer, CampaignsListSerializer,CampaignsReadSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -24,7 +24,7 @@ def list(request):
 def campaign_detail(request, slug):
     if slug is not None:
         campaigns = Campaigns.objects.get(slug=slug)
-        serializer = CampaignsSerializer(campaigns)
+        serializer = CampaignsReadSerializer(campaigns)
         return Response(serializer.data)
 
 
