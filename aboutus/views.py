@@ -50,7 +50,7 @@ def create(request):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
-def update(request, slug):
+def update(request, slugkey):
     data = request.data
     if 'image' in data:
         fmt, img_str = str(data['image']).split(';base64,')
@@ -58,7 +58,7 @@ def update(request, slug):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         data['image'] = img_file
 
-    slug = slugify(data['title'])
+    # slug = slugify(data['title'])
     suffix = 1
     if Aboutus.objects.filter(title__exact=data['title']).exists():
         count = Aboutus.objects.filter(title__exact=data['title']).count()
@@ -72,7 +72,7 @@ def update(request, slug):
 
     data['slug'] = slug
 
-    aboutus = Aboutus.objects.get(slug=slug)
+    aboutus = Aboutus.objects.get(slug=slugkey)
     serializer = AboutusSerializer(aboutus, data=data, partial=True)
     if serializer.is_valid():
         serializer.save()

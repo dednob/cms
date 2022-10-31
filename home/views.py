@@ -1,5 +1,5 @@
 from .models import Home
-from .serializers import HomeSerializer, HomeExperienceSerializer
+from .serializers import HomeSerializer, HomeExperienceSerializer, HomeToggleSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -35,20 +35,15 @@ def toggle_active_status(request, pk):
         home.active = False
         home.save()
 
-    serializer = HomeSerializer(home_list, many=True)
+    home1 = Home.objects.get(active=True)
+    serializer = HomeSerializer(home1)
 
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def experience_details(request):
-    # return Response({
-    #     'Establish year': "1900",
-    #     "AreaofWork": Areaofwork.objects.all().count(),
-    #     "Campaigns": Campaigns.objects.all().count(),
-    #     "Projects": Projects.objects.all().count()
-    #
-    # })
+    
     home = Home.objects.get(active=True)
     serializer = HomeExperienceSerializer(home)
     return Response(serializer.data)

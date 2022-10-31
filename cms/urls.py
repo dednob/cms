@@ -13,6 +13,8 @@ urlpatterns = [
     path('campaigns/', include('campaign.urls')),
     path('gallery/', include('gallery.urls')),
     path('contact/', include('contact.urls')),
+    path('aboutus/', include('aboutus.urls')),
+
 
 
 ]

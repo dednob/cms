@@ -4,9 +4,9 @@ from . import views
 app_name = 'aboutus'
 
 urlpatterns = [
-    path('aboutus/', views.list),
+    path('list/', views.list),
     path('create/', views.create),
-    path('update/<str:slug>', views.update),
+    path('update/<str:slugkey>', views.update),
     # path('partialupdate/<int:pk>', views.partial_update),
     path('delete/<str:slug>', views.delete),
 
