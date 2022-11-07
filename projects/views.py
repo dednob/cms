@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils.text import slugify
 import base64
 from django.core.files.base import ContentFile
+from rest_framework import status
 
 
 # Create your views here.
@@ -14,100 +15,183 @@ from django.core.files.base import ContentFile
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def list(request):
-    project = Projects.objects.all()
-    serializer = ProjectsListSerializer(project, many=True)
-    return Response(serializer.data)
+    try:
+        project = Projects.objects.all()
+        serializer = ProjectsListSerializer(project, many=True)
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received Data Successfully",
+            "data": serializer.data
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
 
 
 @api_view(['GET'])
 def project_detail(request, slug):
-    slug = slug
-    if id is not None:
-        project = Projects.objects.get(slug=slug)
-        serializer = ProjectsSerializer(project)
-        return Response(serializer.data)
+    try:
+        slug = slug
+        if id is not None:
+            project = Projects.objects.get(slug=slug)
+            serializer = ProjectsSerializer(project)
+            return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Received Data Successfully",
+                "data": serializer.data
+            })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
 
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def projects_by_aow(request, slug):
-    project = Projects.objects.filter(areaofwork__slug=slug)
-    serializer = ProjectsSerializer(project, many=True)
-    return Response(serializer.data)
-
+    try:
+        project = Projects.objects.filter(areaofwork__slug=slug)
+        serializer = ProjectsSerializer(project, many=True)
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received Data Successfully",
+            "data": serializer.data
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create(request):
-    project_data = request.data
-    if 'image' in project_data:
-        fmt, img_str = str(project_data['image']).split(';base64,')
-        ext = fmt.split('/')[-1]
-        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-        project_data['image'] = img_file
+    try:
+        project_data = request.data
+        if 'image' in project_data:
+            fmt, img_str = str(project_data['image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            project_data['image'] = img_file
 
-    slug = slugify(project_data['title'])
-    suffix = 1
-    if Projects.objects.filter(title__exact=project_data['title']).exists():
-        count = Projects.objects.filter(title__exact=project_data['title']).count()
-        print(count)
-        suffix += count
-        print("yes")
-        slug = "%s-%s" % (slugify(project_data['title']), suffix)
+        slug = slugify(project_data['title'])
+        suffix = 1
+        if Projects.objects.filter(title__exact=project_data['title']).exists():
+            count = Projects.objects.filter(title__exact=project_data['title']).count()
+            print(count)
+            suffix += count
+            print("yes")
+            slug = "%s-%s" % (slugify(project_data['title']), suffix)
 
-    else:
-        slug = "%s-%s" % (slugify(project_data['title']), suffix)
+        else:
+            slug = "%s-%s" % (slugify(project_data['title']), suffix)
 
-    project_data['slug'] = slug
-    serializer = ProjectsSerializer(data=project_data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
-
+        project_data['slug'] = slug
+        serializer = ProjectsSerializer(data=project_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Received Data Successfully",
+                "data": serializer.data
+            })
+        else:
+            return Response({
+                'code': status.HTTP_400_BAD_REQUEST,
+                'response': "Data not Valid",
+                'error': serializer.errors
+            })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def update(request, slugkey):
-    project_data = request.data
-    if 'image' in project_data:
-        fmt, img_str = str(project_data['image']).split(';base64,')
-        ext = fmt.split('/')[-1]
-        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-        project_data['image'] = img_file
+    try:
+        project_data = request.data
+        if 'image' in project_data:
+            fmt, img_str = str(project_data['image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            project_data['image'] = img_file
 
-    # slug = slugify(project_data['title'])
-    suffix = 1
-    if Projects.objects.filter(title__exact=project_data['title']).exists():
-        count = Projects.objects.filter(title__exact=project_data['title']).count()
-        print(count)
-        suffix += count
-        print("yes")
-        slug = "%s-%s" % (slugify(project_data['title']), suffix)
+        # slug = slugify(project_data['title'])
+        suffix = 1
+        if Projects.objects.filter(title__exact=project_data['title']).exists():
+            count = Projects.objects.filter(title__exact=project_data['title']).count()
+            print(count)
+            suffix += count
+            print("yes")
+            slug = "%s-%s" % (slugify(project_data['title']), suffix)
 
-    else:
-        slug = "%s-%s" % (slugify(project_data['title']), suffix)
+        else:
+            slug = "%s-%s" % (slugify(project_data['title']), suffix)
 
-    project_data['slug'] = slug
+        project_data['slug'] = slug
 
-    project = Projects.objects.get(slug=slugkey)
-    serializer = ProjectsSerializer(project, data=project_data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
-
+        project = Projects.objects.get(slug=slugkey)
+        serializer = ProjectsSerializer(project, data=project_data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Received Data Successfully",
+                "data": serializer.data
+            })
+        else:
+            return Response({
+                'code': status.HTTP_400_BAD_REQUEST,
+                'response': "Data not Valid",
+                'error': serializer.errors
+            })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete(request, slug):
-    project = Projects.objects.get(slug=slug)
-    project.delete()
-    return Response('Deleted')
+    try:
+        project = Projects.objects.get(slug=slug)
+        project.delete()
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Data Deleted"
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
 
 
 @api_view(['GET'])
 def featured_project(request):
-    project = Projects.objects.filter(featured=True)
-    serializer = ProjectsListSerializer(project, many=True)
-    return Response(serializer.data)
+    try:
+        project = Projects.objects.filter(featured=True)
+        serializer = ProjectsListSerializer(project, many=True)
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received Data Successfully",
+            "data": serializer.data
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
