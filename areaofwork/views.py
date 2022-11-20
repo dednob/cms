@@ -84,8 +84,18 @@ def create(request):
         serializer = AreaofworkSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+            return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Data created successfully",
+                'data': serializer.data
+
+            })
+        else:    
+            return Response({
+                    'code': status.HTTP_400_BAD_REQUEST,
+                    'response': "Data not found",
+                    'error': serializer.errors
+                })
 
     except Exception as e:
         return Response({
@@ -132,8 +142,18 @@ def update(request, slugkey):
         serializer = AreaofworkSerializer(areaofwork, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+            return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Data updated successfully",
+                'data': serializer.data
+
+            })
+        else:
+            return Response({
+                    'code': status.HTTP_400_BAD_REQUEST,
+                    'response': "Data not found",
+                    'error': serializer.errors
+                })
 
     except Exception as e:
         return Response({

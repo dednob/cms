@@ -89,72 +89,102 @@ def related_by_projects(request, slug, pk):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create(request):
-    campaign_data = request.data
-    if 'image' in campaign_data and campaign_data['image'] != None:
-        fmt, img_str = str(campaign_data['image']).split(';base64,')
-        ext = fmt.split('/')[-1]
-        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-        campaign_data['image'] = img_file
+    try:
+        campaign_data = request.data
+        if 'image' in campaign_data and campaign_data['image'] != None:
+            fmt, img_str = str(campaign_data['image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            campaign_data['image'] = img_file
 
-        # slug = slugify(campaign_data['title'])
-        suffix = 1
-        if Campaigns.objects.filter(title__exact=campaign_data['title']).exists():
-            count = Campaigns.objects.filter(title__exact=campaign_data['title']).count()
-            print(count)
-            suffix += count
-            print("yes")
-            slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
+            # slug = slugify(campaign_data['title'])
+            suffix = 1
+            if Campaigns.objects.filter(title__exact=campaign_data['title']).exists():
+                count = Campaigns.objects.filter(title__exact=campaign_data['title']).count()
+                print(count)
+                suffix += count
+                print("yes")
+                slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
 
-        else:
-            slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
+            else:
+                slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
 
-        campaign_data['slug'] = slug
-        serializer = CampaignsSerializer(data=campaign_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({
-                'code': status.HTTP_200_OK,
-                'response': "Received Data Successfully",
-                "data": serializer.data
-            })
-        else:
-            return Response({
-                'code': status.HTTP_400_BAD_REQUEST,
-                'response': "Data not Valid",
-                'error': serializer.errors
-            })
+            campaign_data['slug'] = slug
+            serializer = CampaignsSerializer(data=campaign_data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({
+                    'code': status.HTTP_200_OK,
+                    'response': "Data Created Successfully",
+                    "data": serializer.data
+                })
+            else:
+                return Response({
+                    'code': status.HTTP_400_BAD_REQUEST,
+                    'response': "Data not Valid",
+                    'error': serializer.errors
+                })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not found",
+            'error': str(e)
+        })
    
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def update(request, slugkey):
-    campaign_data = request.data
-    if 'image' in campaign_data:
-        fmt, img_str = str(campaign_data['image']).split(';base64,')
-        ext = fmt.split('/')[-1]
-        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-        campaign_data['image'] = img_file
+    try:
+        campaign_data = request.data
+        campaign = Campaigns.objects.get(slug=slugkey)
 
-        # slug = slugify(campaign_data['title'])
-        suffix = 1
-        if Campaigns.objects.filter(title__exact=campaign_data['title']).exists():
-            count = Campaigns.objects.filter(title__exact=campaign_data['title']).count()
-            print(count)
-            suffix += count
-            print("yes")
-            slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
+        if ('image' in campaign_data and campaign_data['image']==None) and campaign.image!=None:
+            
+            campaign_data.pop('image')
 
+        if 'image' in campaign_data and campaign_data['image'] != None:
+            fmt, img_str = str(campaign_data['image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            campaign_data['image'] = img_file
+
+            # slug = slugify(campaign_data['title'])
+            suffix = 1
+            if Campaigns.objects.filter(title__exact=campaign_data['title']).exists():
+                count = Campaigns.objects.filter(title__exact=campaign_data['title']).count()
+                print(count)
+                suffix += count
+                print("yes")
+                slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
+
+            else:
+                slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
+
+        campaign_data['slug'] = slug
+
+        
+        serializer = CampaignsSerializer(campaign, data=campaign_data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                    'code': status.HTTP_200_OK,
+                    'response': "Data Updated Successfully",
+                    "data": serializer.data
+                })
         else:
-            slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
+            return Response({
+                    'code': status.HTTP_400_BAD_REQUEST,
+                    'response': "Data not Valid",
+                    'error': serializer.errors
+                })
 
-    campaign_data['slug'] = slug
-
-    campaign = Campaigns.objects.get(slug=slugkey)
-    serializer = CampaignsSerializer(campaign, data=campaign_data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not found",
+            'error': str(e)
+        })
 
 
 @api_view(['DELETE'])
