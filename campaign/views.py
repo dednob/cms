@@ -48,7 +48,7 @@ def related_by_projects(request, slug, pk):
 @permission_classes([IsAuthenticated])
 def create(request):
     campaign_data = request.data
-    if 'image' in campaign_data:
+    if 'image' in campaign_data and campaign_data['image'] != None:
         fmt, img_str = str(campaign_data['image']).split(';base64,')
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -78,7 +78,12 @@ def create(request):
 @permission_classes([IsAuthenticated])
 def update(request, slugkey):
     campaign_data = request.data
-    if 'image' in campaign_data:
+    campaign = Campaigns.objects.get(slug=slugkey)
+
+    if('image' in campaign_data and campaign_data['image']== None) and campaign.image != None:
+            campaign_data.pop('image')
+
+    if 'image' in campaign_data and campaign_data['image'] != None:
         fmt, img_str = str(campaign_data['image']).split(';base64,')
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -98,7 +103,7 @@ def update(request, slugkey):
 
     campaign_data['slug'] = slug
 
-    campaign = Campaigns.objects.get(slug=slugkey)
+    
     serializer = CampaignsSerializer(campaign, data=campaign_data, partial=True)
     if serializer.is_valid():
         serializer.save()
