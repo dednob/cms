@@ -54,51 +54,19 @@ def aow_detail(request, slug):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create(request):
-    data = request.data
-    slug = None
-    if 'image' in data:
-        fmt, img_str = str(data['image']).split(';base64,')
-        ext = fmt.split('/')[-1]
-        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-        data['image'] = img_file
-
-    # slug = slugify(data['title'])
-    suffix = 1
-    print(data['title'])
-    print(slug)
-
-    if Areaofwork.objects.filter(title__exact=data['title']).exists():
-        print("yes")
-        count = Areaofwork.objects.filter(title__exact=data['title']).count()
-        print(count)
-        suffix += count
-        print("yes")
-        slug = "%s-%s" % (slugify(data['title']), suffix)
-
-    else:
-        print("No")
-        slug = "%s-%s" % (slugify(data['title']), suffix)
-
-    data['slug'] = slug
-    serializer = AreaofworkSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
-
-
-@api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def update(request, slugkey):
-    data = request.data
-    if 'image' in data:
-        fmt, img_str = str(data['image']).split(';base64,')
-        ext = fmt.split('/')[-1]
-        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-        data['image'] = img_file
+    try:
+        data = request.data
+        slug = None
+        if 'image' in data and data['image'] != None:
+            fmt, img_str = str(data['image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['image'] = img_file
 
         # slug = slugify(data['title'])
         suffix = 1
+        print(data['title'])
+        print(slug)
 
         if Areaofwork.objects.filter(title__exact=data['title']).exists():
             print("yes")
@@ -109,16 +77,70 @@ def update(request, slugkey):
             slug = "%s-%s" % (slugify(data['title']), suffix)
 
         else:
+            print("No")
             slug = "%s-%s" % (slugify(data['title']), suffix)
 
-    data['slug'] = slug
+        data['slug'] = slug
+        serializer = AreaofworkSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
 
-    areaofwork = Areaofwork.objects.get(slug=slugkey)
-    serializer = AreaofworkSerializer(areaofwork, data=data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not found",
+            'error': str(e)
+        })
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update(request, slugkey):
+    try:
+        data = request.data
+        areaofwork = Areaofwork.objects.get(slug=slugkey)
+
+        if ('image' in data and data['image']==None) and areaofwork.image != None:
+            data.pop('image')
+
+
+        if 'image' in data and data['image'] != None :
+            fmt, img_str = str(data['image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['image'] = img_file
+
+            # slug = slugify(data['title'])
+            suffix = 1
+
+            if Areaofwork.objects.filter(title__exact=data['title']).exists():
+                print("yes")
+                count = Areaofwork.objects.filter(title__exact=data['title']).count()
+                print(count)
+                suffix += count
+                print("yes")
+                slug = "%s-%s" % (slugify(data['title']), suffix)
+
+            else:
+                slug = "%s-%s" % (slugify(data['title']), suffix)
+
+        data['slug'] = slug
+
+        
+        serializer = AreaofworkSerializer(areaofwork, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not found",
+            'error': str(e)
+        })
 
 
 @api_view(['DELETE'])
