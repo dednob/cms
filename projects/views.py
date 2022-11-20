@@ -74,7 +74,7 @@ def projects_by_aow(request, slug):
 def create(request):
     try:
         project_data = request.data
-        if 'image' in project_data:
+        if 'image' in project_data and project_data['image'] != None:
             fmt, img_str = str(project_data['image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -98,7 +98,7 @@ def create(request):
             serializer.save()
             return Response({
                 'code': status.HTTP_200_OK,
-                'response': "Received Data Successfully",
+                'response': "Created Data Successfully",
                 "data": serializer.data
             })
         else:
@@ -119,7 +119,13 @@ def create(request):
 def update(request, slugkey):
     try:
         project_data = request.data
-        if 'image' in project_data:
+        project = Projects.objects.get(slug=slugkey)
+
+        if ('image' in project_data and project_data['image']==None) and project.image!=None:
+            
+            project_data.pop('blog_image')
+
+        if 'image' in project_data and project_data['image'] != None:
             fmt, img_str = str(project_data['image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -139,13 +145,13 @@ def update(request, slugkey):
 
         project_data['slug'] = slug
 
-        project = Projects.objects.get(slug=slugkey)
+        
         serializer = ProjectsSerializer(project, data=project_data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({
                 'code': status.HTTP_200_OK,
-                'response': "Received Data Successfully",
+                'response': "Updated Data Successfully",
                 "data": serializer.data
             })
         else:

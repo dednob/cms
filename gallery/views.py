@@ -82,7 +82,7 @@ def gallery_by_camp(request, slug):
 def upload(request):
     try:
         gallery_data = request.data
-        if 'image' in gallery_data:
+        if 'image' in gallery_data and gallery_data['image'] != None:
             fmt, img_str = str(gallery_data['image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -108,7 +108,7 @@ def upload(request):
             serializer.save()
             return Response({
                 'code': status.HTTP_200_OK,
-                'response': "Received Data Successfully",
+                'response': "Created Data Successfully",
                 "data": serializer.data
             })
         else:
@@ -129,7 +129,12 @@ def upload(request):
 def update(request, slugkey):
     try:
         gallery_data = request.data
-        if 'image' in gallery_data:
+        gallery = Gallery.objects.get(slug=slugkey)
+        if ('image' in gallery_data and gallery_data['image']==None) and gallery.image!=None:
+            
+            gallery_data.pop('image')
+
+        if 'image' in gallery_data and gallery_data['image'] != None:
             fmt, img_str = str(gallery_data['image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -148,13 +153,13 @@ def update(request, slugkey):
             slug = "%s-%s" % (slugify(gallery_data['title']), suffix)
         gallery_data['slug'] = slug
 
-        gallery = Gallery.objects.get(slug=slugkey)
+        
         serializer = GallerySerializer(gallery, data=gallery_data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({
                 'code': status.HTTP_200_OK,
-                'response': "Received Data Successfully",
+                'response': "Updated Data Successfully",
                 "data": serializer.data
             })
         else:
