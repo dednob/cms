@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Gallery
-from .serializers import GallerySerializer
+from .serializers import GallerySerializer,GalleryReadSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -16,7 +16,7 @@ from rest_framework import status
 def list(request):
     try:
         gallery = Gallery.objects.all()
-        serializer = GallerySerializer(gallery, many=True)
+        serializer = GalleryReadSerializer(gallery, many=True)
         return Response({
             'code': status.HTTP_200_OK,
             'response': "Received Data Successfully",
@@ -35,7 +35,7 @@ def gallery_detail(request, slug):
     try:
         if slug is not None:
             gallery = Gallery.objects.get(slug=slug)
-            serializer = GallerySerializer(gallery)
+            serializer = GalleryReadSerializer(gallery)
             return Response({
                 'code': status.HTTP_200_OK,
                 'response': "Received Data Successfully",

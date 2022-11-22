@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Campaigns
-from .serializers import CampaignsSerializer, CampaignsListSerializer
+from .serializers import CampaignsSerializer, CampaignsListSerializer, CampaignsPostSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -110,7 +110,7 @@ def create(request):
                 slug = "%s-%s" % (slugify(campaign_data['title']), suffix)
 
             campaign_data['slug'] = slug
-            serializer = CampaignsSerializer(data=campaign_data)
+            serializer = CampaignsPostSerializer(data=campaign_data)
             if serializer.is_valid():
                 serializer.save()
                 return Response({

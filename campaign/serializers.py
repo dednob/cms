@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Campaigns
-from gallery.serializers import GallerySerializer
+
 from projects.serializers import *
 from projects.models import *
 
@@ -8,17 +8,20 @@ from projects.models import *
 
 class CampaignsSerializer(serializers.ModelSerializer):
     
-    gallery = GallerySerializer(many=True, read_only=True)
-    projects = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='slug'
-     )
+    
+    projects = ProjectsCampaignSerializer(many=True, read_only=True)
 
     class Meta:
         model = Campaigns
-        fields = ['id', 'title', 'details','description', 'slug', 'image', 'date','projects', 'gallery']
+        
+        fields = ['id', 'title', 'details','description', 'slug', 'image', 'date','projects']
 
+
+class CampaignsPostSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Campaigns
+        fields = ['id', 'title', 'details','description', 'slug', 'image', 'date','projects']
 
 # class CampaignsReadSerializer(serializers.ModelSerializer):
     
@@ -41,7 +44,7 @@ class CampaignsSerializer(serializers.ModelSerializer):
 
 
 class CampaignsListSerializer(serializers.ModelSerializer):
-
+    projects = ProjectsCampaignSerializer(many=True, read_only=True)
     class Meta:
         model = Campaigns
         fields = ['id', 'title', 'details', 'slug', 'image', 'date','projects' ]
@@ -50,4 +53,4 @@ class CampaignsGallerySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Campaigns
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'slug']

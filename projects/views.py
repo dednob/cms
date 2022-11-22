@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Projects
-from .serializers import ProjectsSerializer, ProjectsListSerializer
+from .serializers import ProjectsSerializer, ProjectsListSerializer, ProjectsReadSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -37,7 +37,7 @@ def project_detail(request, slug):
         slug = slug
         if id is not None:
             project = Projects.objects.get(slug=slug)
-            serializer = ProjectsSerializer(project)
+            serializer = ProjectsReadSerializer(project)
             return Response({
                 'code': status.HTTP_200_OK,
                 'response': "Received Data Successfully",
@@ -56,7 +56,7 @@ def project_detail(request, slug):
 def projects_by_aow(request, slug):
     try:
         project = Projects.objects.filter(areaofwork__slug=slug)
-        serializer = ProjectsSerializer(project, many=True)
+        serializer = ProjectsReadSerializer(project, many=True)
         return Response({
             'code': status.HTTP_200_OK,
             'response': "Received Data Successfully",
