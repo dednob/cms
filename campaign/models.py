@@ -23,4 +23,4 @@ class Campaigns(models.Model):
     start_date = models.DateField(_("Date"), default=datetime.date.today)
     finish_date = models.DateField(_("Date"), default=date.today)
     projects = models.ManyToManyField(Projects, related_name="campaigns")
-    organized_by = models.TextField(null=True)
+    organized_by = models.CharField(max_length=500, null=True, blank=True)
