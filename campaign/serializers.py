@@ -5,26 +5,25 @@ from projects.serializers import *
 from projects.models import *
 
 
-
 class CampaignsSerializer(serializers.ModelSerializer):
-    
-    
     projects = ProjectsCampaignSerializer(many=True, read_only=True)
 
     class Meta:
         model = Campaigns
-        
-        fields = ['id', 'title', 'details','description', 'slug', 'image', 'date','projects']
+
+        fields = ['id', 'title', 'details', 'description', 'slug', 'image', 'projects', 'start_date',
+                  'finish_date', 'organized_by']
 
 
 class CampaignsPostSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Campaigns
-        fields = ['id', 'title', 'details','description', 'slug', 'image', 'date','projects']
+        fields = ['id', 'title', 'details', 'description', 'slug', 'image', 'projects', 'start_date', 'finish_date',
+                  'organized_by']
+
 
 # class CampaignsReadSerializer(serializers.ModelSerializer):
-    
+
 #     gallery = GallerySerializer(many=True, read_only=True)
 #     projects = ProjectsSerializer(many=True, read_only=True)
 
@@ -37,20 +36,21 @@ class CampaignsPostSerializer(serializers.ModelSerializer):
 #         model = Campaigns
 #         fields = ['id', 'title', 'details','description', 'slug', 'image', 'date', 'projects', 'gallery']
 
-    # def to_representation(self, instance):
-    #     rep = super().to_representation(instance)
-    #     rep["projects"] = ProjectsSerializer(instance.projects.all(), many=True).data
-    #     return rep
+# def to_representation(self, instance):
+#     rep = super().to_representation(instance)
+#     rep["projects"] = ProjectsSerializer(instance.projects.all(), many=True).data
+#     return rep
 
 
 class CampaignsListSerializer(serializers.ModelSerializer):
     projects = ProjectsCampaignSerializer(many=True, read_only=True)
+
     class Meta:
         model = Campaigns
-        fields = ['id', 'title', 'details', 'slug', 'image', 'date','projects' ]
+        fields = ['id', 'title', 'details', 'slug', 'image', 'date', 'projects']
+
 
 class CampaignsGallerySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Campaigns
         fields = ['id', 'title', 'slug']

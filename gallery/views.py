@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Gallery
-from .serializers import GallerySerializer,GalleryReadSerializer
+from .serializers import GallerySerializer, GalleryReadSerializer, GallerySerializer_slider
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -8,6 +8,7 @@ from django.utils.text import slugify
 import base64
 from django.core.files.base import ContentFile
 from rest_framework import status
+
 
 # Create your views here.
 
@@ -55,6 +56,25 @@ def gallery_by_camp(request, slug):
     try:
         gallery = Gallery.objects.filter(campaign__slug=slug)
         serializer = GallerySerializer(gallery, many=True)
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received Data Successfully",
+            "data": serializer.data
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
+
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def gallery_by_camp_slider(request, slug):
+    try:
+        gallery = Gallery.objects.filter(campaign__slug=slug)
+        serializer = GallerySerializer_slider(gallery, many=True)
         return Response({
             'code': status.HTTP_200_OK,
             'response': "Received Data Successfully",
@@ -124,14 +144,14 @@ def upload(request):
             'error': str(e)
         })
 
+
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def update(request, slugkey):
     try:
         gallery_data = request.data
         gallery = Gallery.objects.get(slug=slugkey)
-        if ('image' in gallery_data and gallery_data['image']==None) and gallery.image!=None:
-            
+        if ('image' in gallery_data and gallery_data['image'] == None) and gallery.image != None:
             gallery_data.pop('image')
 
         if 'image' in gallery_data and gallery_data['image'] != None:
@@ -153,7 +173,6 @@ def update(request, slugkey):
             slug = "%s-%s" % (slugify(gallery_data['title']), suffix)
         gallery_data['slug'] = slug
 
-        
         serializer = GallerySerializer(gallery, data=gallery_data, partial=True)
         if serializer.is_valid():
             serializer.save()

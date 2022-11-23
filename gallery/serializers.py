@@ -25,4 +25,7 @@ class GalleryReadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
+class GallerySerializer_slider(serializers.ModelSerializer):
+    class Meta:
+        model = Gallery
+        fields = ['image']
