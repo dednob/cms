@@ -6,7 +6,7 @@ class AreaofworkSerializer(serializers.ModelSerializer):
     # projects = ProjectsSerializer(many=True, read_only=True)
     class Meta:
         model = Areaofwork
-        fields = ['id', 'title', 'details', 'slug', 'image', 'projects']
+        fields = ['id', 'title', 'details', 'slug', 'image']
 
 class AreaofworkReadSerializer(serializers.ModelSerializer):
     class Meta:

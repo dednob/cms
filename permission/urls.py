@@ -9,5 +9,5 @@ urlpatterns = [
     path('list/', views.permission_list),
     path('group/update/<int:pk>', views.update_group),
     
-
+    
 ]
