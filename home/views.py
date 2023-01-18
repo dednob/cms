@@ -160,7 +160,7 @@ def create_home(request):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
-def update(request, slugkey):
+def update(request, pk):
     try:
         data = request.data
         if 'image' in data:
@@ -185,7 +185,7 @@ def update(request, slugkey):
 
         data['slug'] = slug
 
-        home = Home.objects.get(slug=slugkey)
+        home = Home.objects.get(id=pk)
         serializer = HomeSerializer(home, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()

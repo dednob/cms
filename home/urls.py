@@ -11,7 +11,7 @@ urlpatterns = [
     path('active/toggle/<int:pk>', views.toggle_active_status),
     path('create/', views.create_home),
     path('experience/', views.experience_details),
-    path('update/<str:slugkey>', views.update),
+    path('update/<int:pk>', views.update),
     # path('partialupdate/<int:pk>', views.partial_update_home),
     path('delete/<str:slug>', views.delete_home),
 
