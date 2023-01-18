@@ -4,7 +4,9 @@ from . import views
 app_name = 'home'
 
 urlpatterns = [
-    path('detail/', views.home_details),
+    path('view/', views.home_view),
+    path('detail/<int:pk>', views.home_details),
+
     path('list/', views.home_list),
     path('active/toggle/<int:pk>', views.toggle_active_status),
     path('create/', views.create_home),

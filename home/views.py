@@ -13,9 +13,26 @@ from rest_framework import status
 
 
 @api_view(['GET'])
-def home_details(request):
+def home_view(request):
     try:
         home = Home.objects.get(active=True)
+        serializer = HomeSerializer(home)
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received Data Successfully",
+            "data": serializer.data
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
+
+@api_view(['GET'])
+def home_details(request, pk):
+    try:
+        home = Home.objects.get(id = pk)
         serializer = HomeSerializer(home)
         return Response({
             'code': status.HTTP_200_OK,
