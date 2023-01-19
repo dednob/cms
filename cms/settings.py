@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'campaign',
     'donate',
     'gallery',
-    'contact'
+    'contact',
+    'reviews',
 ]
 
 MIDDLEWARE = [

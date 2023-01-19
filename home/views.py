@@ -121,6 +121,34 @@ def create_home(request):
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             data['image'] = img_file
 
+        if 'top_banner_image' in data:
+            print("ami top banner")
+            fmt, img_str = str(data['top_banner_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['top_banner_image'] = img_file
+        
+        if 'mid_banner_image' in data:
+            print("ami mid_banner_image")
+            fmt, img_str = str(data['mid_banner_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['mid_banner_image'] = img_file
+        
+        if 'mid_layer_image' in data:
+            print("ami mid_layer_image")
+            fmt, img_str = str(data['mid_layer_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['mid_layer_image'] = img_file
+        
+        if 'footer_image' in data:
+            print("ami footer_image")
+            fmt, img_str = str(data['footer_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['footer_image'] = img_file
+
         slug = slugify(data['title'])
         suffix = 1
 
@@ -163,11 +191,53 @@ def create_home(request):
 def update(request, pk):
     try:
         data = request.data
+        home = Home.objects.get(id=pk)
+
+        if ('image' in data and data['image'] == None) and home.image != None:
+            data.pop('image')
+        
+        if ('top_banner_image' in data and data['top_banner_image'] == None) and home.image != None:
+            data.pop('top_banner_image')
+        
+        if ('mid_banner_image' in data and data['mid_banner_image'] == None) and home.image != None:
+            data.pop('mid_banner_image')
+        
+        if ('mid_layer_image' in data and data['mid_layer_image'] == None) and home.image != None:
+            data.pop('mid_layer_image')
+        
+        if ('footer_image' in data and data['footer_image'] == None) and home.image != None:
+            data.pop('footer_image')
+
+
         if 'image' in data:
             fmt, img_str = str(data['image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             data['image'] = img_file
+
+        if 'top_banner_image' in data:
+            fmt, img_str = str(data['top_banner_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['top_banner_image'] = img_file
+        
+        if 'mid_banner_image' in data:
+            fmt, img_str = str(data['mid_banner_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['mid_banner_image'] = img_file
+        
+        if 'mid_layer_image' in data:
+            fmt, img_str = str(data['mid_layer_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['mid_layer_image'] = img_file
+        
+        if 'footer_image' in data:
+            fmt, img_str = str(data['footer_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            data['footer_image'] = img_file
 
         slug = slugify(data['title'])
         suffix = 1
@@ -185,7 +255,7 @@ def update(request, pk):
 
         data['slug'] = slug
 
-        home = Home.objects.get(id=pk)
+        
         serializer = HomeSerializer(home, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()

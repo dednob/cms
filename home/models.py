@@ -16,4 +16,11 @@ class Home(models.Model):
     image = models.ImageField(upload_to=generate_filename, null=True)
     active = models.BooleanField(default=False)
     experience_data = models.JSONField(default=dict)
+    
+    top_banner_image = models.ImageField(upload_to=generate_filename, null=True)
+    mid_banner_image = models.ImageField(upload_to=generate_filename, null=True)
+    mid_layer_image = models.ImageField(upload_to=generate_filename, null=True)
+    footer_image = models.ImageField(upload_to=generate_filename, null=True)
+    
+
 
