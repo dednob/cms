@@ -13,14 +13,27 @@ class Home(models.Model):
     title = models.CharField(max_length=10000)
     details = models.TextField(null=True)
     slug = models.SlugField(max_length=255, null=True, unique=True)
-    image = models.ImageField(upload_to=generate_filename, null=True)
+    top_banner_image = models.ImageField(upload_to=generate_filename, null=True)
     active = models.BooleanField(default=False)
     experience_data = models.JSONField(default=dict)
     
-    top_banner_image = models.ImageField(upload_to=generate_filename, null=True)
-    mid_banner_image = models.ImageField(upload_to=generate_filename, null=True)
-    mid_layer_image = models.ImageField(upload_to=generate_filename, null=True)
+    # top_banner_image = models.ImageField(upload_to=generate_filename, null=True)
+    # mid_banner_image = models.ImageField(upload_to=generate_filename, null=True)
+    # mid_layer_image = models.ImageField(upload_to=generate_filename, null=True)
     footer_image = models.ImageField(upload_to=generate_filename, null=True)
     
+
+class Achievement(models.Model):
+    title = models.CharField(max_length=10000)
+    details = models.TextField(null=True)
+    slug = models.SlugField(max_length=255, null=True, unique=True)
+    image = models.ImageField(upload_to=generate_filename, null=True)
+    active = models.BooleanField(default=False)
+    background_image = models.ImageField(upload_to=generate_filename, null=True)
+
+# top_banner_image = models.ImageField(upload_to=generate_filename, null=True)
+# mid_banner_image = models.ImageField(upload_to=generate_filename, null=True)
+# mid_layer_image = models.ImageField(upload_to=generate_filename, null=True)
+
 
 

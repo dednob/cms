@@ -14,3 +14,12 @@ class Aboutus(models.Model):
     details = models.TextField()
     slug = models.SlugField(max_length=255, null=True, unique=True)
     image = models.ImageField(upload_to=generate_filename, null=True)
+
+
+
+class Team(models.Model):
+    employee_name = models.CharField(max_length=500)
+    designation = models.CharField(max_length=500)
+    image = models.ImageField(upload_to=generate_filename, null=True)
+    
+

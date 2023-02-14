@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Home
+from .models import Home, Achievement
 
 
 class HomeSerializer(serializers.ModelSerializer):
@@ -21,3 +21,9 @@ class HomeExperienceSerializer(serializers.ModelSerializer):
         model = Home
         fields = ['experience_data']
         
+
+
+class AchievmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Achievement
+        fields = '__all__'
