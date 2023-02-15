@@ -166,7 +166,7 @@ def delete(request, pk):
 # @permission_classes([IsAuthenticated])
 def team_list(request):
     try:
-        team = Team.objects.all()
+        team = Team.objects.all().order_by('priority')
         serializer = TeamSerializer(team, many=True)
         return Response({
             'code': status.HTTP_200_OK,
