@@ -520,7 +520,7 @@ def toggle_achievement_active_status(request, pk):
             achievement.active = False
             achievement.save()
 
-        achv1 = Home.objects.get(active=True)
+        achv1 = Achievement.objects.get(active=True)
         serializer = AchievmentSerializer(achv1)
 
         return Response({

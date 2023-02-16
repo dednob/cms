@@ -4,10 +4,13 @@ from . import views
 app_name = 'aboutus'
 
 urlpatterns = [
+    path('view/', views.about_view),
+    path('detail/<int:pk>', views.about_details),
     path('list/', views.list),
     path('create/', views.create),
     path('update/<int:pk>', views.update),
     # path('partialupdate/<int:pk>', views.partial_update),
+    path('active/toggle/<int:pk>', views.toggle_aboutus_active_status),
     path('delete/<int:pk>', views.delete),
 
     path('team/list/', views.team_list),

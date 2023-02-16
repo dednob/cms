@@ -29,6 +29,46 @@ def list(request):
             'response': "Data not Found",
             'error': str(e)
         })
+    
+@api_view(['GET'])
+def about_view(request):
+    try:
+        about = Aboutus.objects.get(active=True)
+        serializer = AboutusSerializer(about)
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received Data Successfully",
+            "data": serializer.data
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
+
+@api_view(['GET'])
+def about_details(request, pk):
+    try:
+        about = Aboutus.objects.get(id = pk)
+        serializer = AboutusSerializer(about)
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received Data Successfully",
+            "data": serializer.data
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
+
+
+
+
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create(request):
@@ -146,6 +186,32 @@ def delete(request, pk):
         return Response({
             'code': status.HTTP_200_OK,
             'response': "Data Deleted"
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not Found",
+            'error': str(e)
+        })
+    
+@api_view(['GET'])
+def toggle_aboutus_active_status(request, pk):
+    try:
+        about = Aboutus.objects.get(id=pk)
+        about.active = True
+        about.save()
+        about_list = Aboutus.objects.exclude(id=pk)
+        for about in about_list:
+            about.active = False
+            about.save()
+
+        about = Aboutus.objects.get(active=True)
+        serializer = AboutusSerializer(about)
+
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received Data Successfully",
+            "data": serializer.data
         })
     except Exception as e:
         return Response({
