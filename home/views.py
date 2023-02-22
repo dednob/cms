@@ -209,10 +209,10 @@ def update(request, pk):
         # if ('image' in data and data['image'] == None) and home.image != None:
         #     data.pop('image')
         
-        if ('top_banner_image' in data and data['top_banner_image'] == None) and home.top_banner_image != None:
+        if ('top_banner_image' in data and data['top_banner_image'] == None):
             data.pop('top_banner_image')
 
-        if ('overview_banner_image' in data and data['overview_banner_image'] == None) and home.overview_banner_image != None:
+        if ('overview_banner_image' in data and data['overview_banner_image'] == None):
             data.pop('overview_banner_image')
         
         # if ('mid_banner_image' in data and data['mid_banner_image'] == None) and home.image != None:
@@ -221,7 +221,7 @@ def update(request, pk):
         # if ('mid_layer_image' in data and data['mid_layer_image'] == None) and home.image != None:
         #     data.pop('mid_layer_image')
         
-        if ('footer_image' in data and data['footer_image'] == None) and home.footer_image != None:
+        if ('footer_image' in data and data['footer_image'] == None):
             data.pop('footer_image')
 
 
