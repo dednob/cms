@@ -682,7 +682,7 @@ def work_list_count(request):
         contact_count = Contact.objects.all().count()
         home_count = Home.objects.all().count()
         campaign_count = Campaigns.objects.all().count()
-        employee_count = Team.objects.all().count()
+        # employee_count = Team.objects.all().count()
         review_count = Review.objects.all().count()
         
         return Response({
