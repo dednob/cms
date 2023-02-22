@@ -693,7 +693,7 @@ def work_list_count(request):
             'contact': contact_count,
             'home': home_count,
             'campaign' : campaign_count,
-            'employee': employee_count,
+            # 'employee': employee_count,
             'reviews' : review_count
             
 
