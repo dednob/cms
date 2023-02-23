@@ -123,7 +123,7 @@ def update(request, slugkey):
 
         if ('image' in project_data and project_data['image']==None) and project.image!=None:
             
-            project_data.pop('blog_image')
+            project_data.pop('image')
 
         if 'image' in project_data and project_data['image'] != None:
             fmt, img_str = str(project_data['image']).split(';base64,')
